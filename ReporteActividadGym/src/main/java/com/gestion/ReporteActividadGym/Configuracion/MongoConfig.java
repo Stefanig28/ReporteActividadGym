@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories(basePackages = "com.gestion.ReporteActividadGym.Repositorio")
 public class MongoConfig extends AbstractMongoClientConfiguration {
+
     @Override
     protected String getDatabaseName() {
         return "reporte_actividades";

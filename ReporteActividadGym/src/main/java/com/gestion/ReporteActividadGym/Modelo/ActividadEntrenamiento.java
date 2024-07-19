@@ -3,20 +3,28 @@ package com.gestion.ReporteActividadGym.Modelo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.Date;
 
-@Document(collection = "actividades")
+@Document(collection = "actividadesEntrenamiento")
 public class ActividadEntrenamiento {
+
     @Id
     private String id;
-    private Long aprendizId;
-    private String nombreAprendiz;
-    private Long entrenadorId;
-    private String nombreEntrenador;
-    private String nombreEntrenamiento;
-    private LocalDate fechaEntrenamiento;
-    private String tipoEntrenamiento;
-    private int duracionEntrenamiento;
+    private String tipoActividad;
+    private Date fechaActividad;
+    private String aprendizId;
+    private String entrenadorId;
+
+    public ActividadEntrenamiento() {
+    }
+
+    public ActividadEntrenamiento(String id, String tipoActividad, Date fechaActividad, String aprendizId, String entrenadorId) {
+        this.id = id;
+        this.tipoActividad = tipoActividad;
+        this.fechaActividad = fechaActividad;
+        this.aprendizId = aprendizId;
+        this.entrenadorId = entrenadorId;
+    }
 
     public String getId() {
         return id;
@@ -26,67 +34,35 @@ public class ActividadEntrenamiento {
         this.id = id;
     }
 
-    public Long getAprendizId() {
+    public Date getFechaActividad() {
+        return fechaActividad;
+    }
+
+    public void setFechaActividad(Date fechaActividad) {
+        this.fechaActividad = fechaActividad;
+    }
+
+    public String getTipoActividad() {
+        return tipoActividad;
+    }
+
+    public void setTipoActividad(String tipoActividad) {
+        this.tipoActividad = tipoActividad;
+    }
+
+    public String getAprendizId() {
         return aprendizId;
     }
 
-    public void setAprendizId(Long aprendizId) {
+    public void setAprendizId(String aprendizId) {
         this.aprendizId = aprendizId;
     }
 
-    public String getNombreAprendiz() {
-        return nombreAprendiz;
-    }
-
-    public void setNombreAprendiz(String nombreAprendiz) {
-        this.nombreAprendiz = nombreAprendiz;
-    }
-
-    public Long getEntrenadorId() {
+    public String getEntrenadorId() {
         return entrenadorId;
     }
 
-    public void setEntrenadorId(Long entrenadorId) {
+    public void setEntrenadorId(String entrenadorId) {
         this.entrenadorId = entrenadorId;
-    }
-
-    public String getNombreEntrenador() {
-        return nombreEntrenador;
-    }
-
-    public void setNombreEntrenador(String nombreEntrenador) {
-        this.nombreEntrenador = nombreEntrenador;
-    }
-
-    public String getNombreEntrenamiento() {
-        return nombreEntrenamiento;
-    }
-
-    public void setNombreEntrenamiento(String nombreEntrenamiento) {
-        this.nombreEntrenamiento = nombreEntrenamiento;
-    }
-
-    public LocalDate getFechaEntrenamiento() {
-        return fechaEntrenamiento;
-    }
-
-    public void setFechaEntrenamiento(LocalDate fechaEntrenamiento) {
-        this.fechaEntrenamiento = fechaEntrenamiento;
-    }
-
-    public String getTipoEntrenamiento() {
-        return tipoEntrenamiento;
-    }
-
-    public void setTipoEntrenamiento(String tipoEntrenamiento) {
-        this.tipoEntrenamiento = tipoEntrenamiento;
-    }
-
-    public int getDuracionEntrenamiento() {
-        return duracionEntrenamiento;
-    }
-
-    public void setDuracionEntrenamiento(int duracionEntrenamiento) {
-        this.duracionEntrenamiento = duracionEntrenamiento;
     }
 }
