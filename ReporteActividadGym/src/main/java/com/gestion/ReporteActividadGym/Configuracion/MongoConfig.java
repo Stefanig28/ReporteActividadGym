@@ -1,4 +1,4 @@
-package com.gestion.ReporteActividadGym.Configuracion;
+/*package com.gestion.ReporteActividadGym.Configuracion;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -30,4 +30,4 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     public boolean autoIndexCreation() {
         return true;
     }
-}
+}*/
