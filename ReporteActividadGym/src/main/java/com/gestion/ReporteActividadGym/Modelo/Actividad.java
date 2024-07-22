@@ -5,17 +5,18 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @Document(collection = "actividades")
-public class ReporteActividad {
+public class Actividad {
     @Id
     private String id;
-    private String aprendizId;
-    private String nombreAprendiz;
-    private String entrenadorId;
+    private Long aprendizId;
+    private Long entrenadorId;
     private String nombreEntrenamiento;
-    private String fechaEntrenamiento;
+    private LocalDate fechaEntrenamiento;
     private String tipoEntrenamiento;
     private String duracionEntrenamiento;
 
