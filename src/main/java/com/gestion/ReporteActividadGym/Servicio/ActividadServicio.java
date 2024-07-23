@@ -102,7 +102,7 @@ public class ActividadServicio {
         reporte.append(String.format("Reporte Mensual del Aprendiz %d (%s %d):\n", aprendizId, inicioMes.getMonth(), anio));
 
         for (int semana = 1; semana <= 4; semana++) {
-            reporte.append(String.format("Semana %d:\n", semana));
+            reporte.append(String.format("\nSemana %d:\n", semana));
             List<Actividad> actividadesSemana = actividadesPorSemana.getOrDefault(semana, Collections.emptyList());
 
             // Ordenamos las actividades por fecha
