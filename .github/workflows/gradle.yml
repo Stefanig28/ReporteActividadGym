@@ -1,8 +1,5 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# This workflow will build a Java project with Gradle and run tests
+# It will cache and restore dependencies to improve workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
 name: Java CI with Gradle
@@ -17,15 +14,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      mongodb:
-        image: mongo:latest
+      mysql:
+        image: mysql:8.0
         ports:
-          - 27017:27017
+          - 3306:3306
         options: >-
-          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })' --quiet"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+        env:
+          MYSQL_ROOT_PASSWORD: 2424
+          MYSQL_DATABASE: gestion_gimnasio
 
     steps:
       - uses: actions/checkout@v4
@@ -42,11 +42,11 @@ jobs:
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x ./gradlew
 
-      - name: Wait for MongoDB to be ready
+      - name: Wait for MySQL to be ready
         run: |
-          echo "Waiting for MongoDB to be ready..."
-          until mongo --eval 'db.runCommand({ ping: 1 })' --quiet; do
-            echo "MongoDB is unavailable - sleeping"
+          echo "Waiting for MySQL to be ready..."
+          until mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
+            echo "MySQL is unavailable - sleeping"
             sleep 10
           done
 
