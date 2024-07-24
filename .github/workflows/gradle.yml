@@ -40,6 +40,11 @@ jobs:
           name: test-results
           path: build/reports/tests/test
 
+      - name: Show Test Results
+        run: |
+          echo "Test results:"
+          cat build/reports/tests/test/index.html || echo "No test results found."
+
   dependency-submission:
     runs-on: ubuntu-latest
     permissions:
@@ -52,4 +57,5 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
 
