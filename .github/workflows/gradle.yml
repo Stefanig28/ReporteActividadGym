@@ -13,8 +13,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        env:
+          MYSQL_ROOT_PASSWORD: 2424
+          MYSQL_DATABASE: gestion_gimnasio
 
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +41,14 @@ jobs:
 
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x ./gradlew
+
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "Waiting for MySQL to be ready..."
+          until mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
+            echo "MySQL is unavailable - sleeping"
+            sleep 10
+          done
 
       - name: Run Gradle Build and Tests
         run: ./gradlew build
