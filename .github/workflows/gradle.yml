@@ -34,17 +34,6 @@ jobs:
       - name: Run Gradle Build
         run: ./gradlew build
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: build/libs
-
-      - name: Show Build Results
-        run: |
-          echo "Build results:"
-          ls -al build/libs
-
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -73,7 +62,6 @@ jobs:
         run: |
           echo "Test results:"
           cat build/reports/tests/test/index.html || echo "No test results found."
-
   dependency-submission:
     runs-on: ubuntu-latest
     permissions:
