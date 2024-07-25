@@ -41,16 +41,3 @@ jobs:
         with:
           name: test-results
           path: build/reports/tests/test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy to Railway
-        uses: railwayapp/railway-action@v1
-        with:
-          railway-project-id: 7f033de9-19b6-4caf-8db2-a7db0f341568
-          railway-token: 78aeafbd-ef06-4c06-82d2-951a1a5693f9
-          env: production
