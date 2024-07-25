@@ -1,6 +1,5 @@
-# This workflow will build a Java project with Gradle and run tests
-# It will cache and restore dependencies to improve workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+# This workflow will build and deploy a Java project with Gradle to Railway
+# and connect it to a MongoDB database.
 
 name: Java CI with Gradle
 
@@ -13,14 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    services:
-      mongodb:
-        image: mongo:6.0
-        ports:
-          - 27017:27017
 
     steps:
       - uses: actions/checkout@v4
@@ -39,47 +30,8 @@ jobs:
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x ./gradlew
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Run Gradle Build
+      - name: Build with Gradle
         run: ./gradlew build
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    services:
-      mongodb:
-        image: mongo:6.0
-        ports:
-          - 27017:27017
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Grant execute permission for Gradle Wrapper
-        run: chmod +x ./gradlew
-
-      - name: Wait for MongoDB to be ready
-        run: |
-          echo "Waiting for MongoDB to be ready..."
-          until nc -z -v -w30 127.0.0.1 27017; do
-            echo "MongoDB is unavailable - sleeping"
-            sleep 5
-          done
 
       - name: Run Gradle Tests
         run: ./gradlew test
@@ -90,3 +42,15 @@ jobs:
           name: test-results
           path: build/reports/tests/test
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Railway
+        uses: railwayapp/railway-action@v1
+        with:
+          railway-project-id: ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway-token: ${{ secrets.RAILWAY_TOKEN }}
+          env: production
