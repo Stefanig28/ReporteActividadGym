@@ -18,14 +18,9 @@ jobs:
 
     services:
       mongodb:
-        image: mongo:latest
+        image: mongo:6.0
         ports:
           - 27017:27017
-        options: >-
-          --health-cmd "mongo --eval 'db.runCommand({ connectionStatus: 1 })' --quiet"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
 
     steps:
       - uses: actions/checkout@v4
@@ -50,14 +45,9 @@ jobs:
     needs: build
     services:
       mongodb:
-        image: mongo:latest
+        image: mongo:6.0
         ports:
           - 27017:27017
-        options: >-
-          --health-cmd "mongo --eval 'db.runCommand({ connectionStatus: 1 })' --quiet"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
 
     steps:
       - uses: actions/checkout@v4
@@ -84,3 +74,4 @@ jobs:
         run: |
           echo "Test results:"
           cat build/reports/tests/test/index.html || echo "No test results found."
+
