@@ -27,21 +27,21 @@ public class ActividadControlador {
         this.actividadServicio = actividadServicio;
     }
 
-    @Operation(summary = "Guardar una nueva actividad")
+    @Operation(summary = "Crear una nueva actividad")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Actividad guardada correctamente"),
             @ApiResponse(responseCode = "400", description = "La actividad ya existe o la información está incompleta"),
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
     @PostMapping("/crear")
-    public ResponseEntity<String> guardarActividad(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<String> crearActividad(@RequestBody Map<String, Object> requestBody) {
         try {
             Long aprendizId = Long.parseLong(requestBody.get("aprendizId").toString());
             Long entrenadorId = Long.parseLong(requestBody.get("entrenadorId").toString());
             String nombreEntrenamiento = requestBody.get("nombreEntrenamiento").toString();
             LocalDate fechaEntrenamiento = LocalDate.parse(requestBody.get("fechaEntrenamiento").toString());
             String tipoEntrenamiento = requestBody.get("tipoEntrenamiento").toString();
-            Integer duracionEntrenamiento = Integer.parseInt(requestBody.get("duracionEntrenamiento").toString());
+            String duracionEntrenamiento = requestBody.get("duracionEntrenamiento").toString();
 
             Actividad actividad = new Actividad();
             actividad.setAprendizId(aprendizId);
@@ -51,12 +51,12 @@ public class ActividadControlador {
             actividad.setTipoEntrenamiento(tipoEntrenamiento);
             actividad.setDuracionEntrenamiento(String.valueOf(duracionEntrenamiento));
 
-            actividadServicio.guardarActividad(actividad);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Actividad guardada correctamente");
+            actividadServicio.crearActividad(actividad);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Actividad creada correctamente");
         } catch (ActividadExistenteExcepcion e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Actividad ya existe: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la actividad: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la actividad: " + e.getMessage());
         }
     }
 

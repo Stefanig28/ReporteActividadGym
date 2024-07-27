@@ -23,7 +23,7 @@ public class ActividadServicio {
         this.actividadRepositorio = actividadRepositorio;
     }
 
-    public void guardarActividad(Actividad actividad) {
+    public void crearActividad(Actividad actividad) {
         List<Actividad> actividadExiste = actividadRepositorio.findByAprendizIdAndFechaEntrenamientoAndNombreEntrenamientoAndTipoEntrenamientoAndDuracionEntrenamiento(
                 actividad.getAprendizId(),
                 actividad.getFechaEntrenamiento(),
