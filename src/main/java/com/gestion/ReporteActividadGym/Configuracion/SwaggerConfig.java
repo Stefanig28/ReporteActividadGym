@@ -13,7 +13,7 @@ public class SwaggerConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("spring-public")
-                .pathsToMatch("/api/**")
+                .pathsToMatch("/**")
                 .build();
     }
 
