@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/actividades")
@@ -32,18 +34,29 @@ public class ActividadControlador {
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
     @PostMapping("/guardar")
-    public ResponseEntity<String> guardadActividad(
-            @Parameter(description = "Datos de la actividad a guardar", required = true) @RequestBody Actividad actividad) {
+    public ResponseEntity<String> guardarActividad(@RequestBody Map<String, Object> requestBody) {
         try {
-            if (actividad.getAprendizId() == null || actividad.getEntrenadorId() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La id del aprendiz y del entrenador son obligatorias.");
-            }
+            Long aprendizId = Long.parseLong(requestBody.get("aprendizId").toString());
+            Long entrenadorId = Long.parseLong(requestBody.get("entrenadorId").toString());
+            String nombreEntrenamiento = requestBody.get("nombreEntrenamiento").toString();
+            LocalDate fechaEntrenamiento = LocalDate.parse(requestBody.get("fechaEntrenamiento").toString());
+            String tipoEntrenamiento = requestBody.get("tipoEntrenamiento").toString();
+            Integer duracionEntrenamiento = Integer.parseInt(requestBody.get("duracionEntrenamiento").toString());
+
+            Actividad actividad = new Actividad();
+            actividad.setAprendizId(aprendizId);
+            actividad.setEntrenadorId(entrenadorId);
+            actividad.setNombreEntrenamiento(nombreEntrenamiento);
+            actividad.setFechaEntrenamiento(fechaEntrenamiento);
+            actividad.setTipoEntrenamiento(tipoEntrenamiento);
+            actividad.setDuracionEntrenamiento(String.valueOf(duracionEntrenamiento));
+
             actividadServicio.guardarActividad(actividad);
-            return ResponseEntity.ok("Se guardó la actividad correctamente.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Actividad guardada correctamente");
         } catch (ActividadExistenteExcepcion e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Actividad ya existe: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado :(");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la actividad: " + e.getMessage());
         }
     }
 
