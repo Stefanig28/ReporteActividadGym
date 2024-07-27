@@ -26,7 +26,7 @@ public class ActividadServicioTest {
     }
 
     @Test
-    public void guardarActividadExistenteTest() {
+    public void crearActividadExistenteTest() {
         Actividad actividad = new Actividad();
 
         when(actividadRepositorio.findByAprendizIdAndFechaEntrenamientoAndNombreEntrenamientoAndTipoEntrenamientoAndDuracionEntrenamiento(
@@ -37,11 +37,11 @@ public class ActividadServicioTest {
                 actividad.getDuracionEntrenamiento()
         )).thenReturn(Collections.singletonList(actividad));
 
-        assertThrows(ActividadExistenteExcepcion.class, () -> actividadServicio.guardarActividad(actividad));
+        assertThrows(ActividadExistenteExcepcion.class, () -> actividadServicio.crearActividad(actividad));
     }
 
     @Test
-    public void guardarActividadNuevaTest() {
+    public void crearActividadNuevaTest() {
         Actividad actividad = new Actividad();
 
         when(actividadRepositorio.findByAprendizIdAndFechaEntrenamientoAndNombreEntrenamientoAndTipoEntrenamientoAndDuracionEntrenamiento(
@@ -52,7 +52,7 @@ public class ActividadServicioTest {
                 actividad.getDuracionEntrenamiento()
         )).thenReturn(Collections.emptyList());
 
-        actividadServicio.guardarActividad(actividad);
+        actividadServicio.crearActividad(actividad);
 
         verify(actividadRepositorio).save(actividad);
 
@@ -122,7 +122,7 @@ public class ActividadServicioTest {
         when(actividadRepositorio.findByAprendizId(aprendizId)).thenReturn(actividades);
 
         String reporte = actividadServicio.generarReporteMensual(aprendizId,2,2024);
-        assertTrue(!reporte.contains("Reporte Mensual el Aprendiz 1 (FEBRUARY 2024)"));
+        assertFalse(reporte.contains("Reporte Mensual el Aprendiz 1 (FEBRUARY 2024)"));
         assertTrue(reporte.contains("Semana 1:"));
         assertTrue(reporte.contains("Semana 2:"));
 
