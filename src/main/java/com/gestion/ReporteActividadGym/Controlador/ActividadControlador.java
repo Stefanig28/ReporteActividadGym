@@ -33,7 +33,7 @@ public class ActividadControlador {
             @ApiResponse(responseCode = "400", description = "La actividad ya existe o la información está incompleta"),
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
-    @PostMapping("/guardar")
+    @PostMapping("/crear")
     public ResponseEntity<String> guardarActividad(@RequestBody Map<String, Object> requestBody) {
         try {
             Long aprendizId = Long.parseLong(requestBody.get("aprendizId").toString());
