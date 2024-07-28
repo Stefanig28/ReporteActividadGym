@@ -29,8 +29,8 @@ public class ActividadControlador {
 
     @Operation(summary = "Crear una nueva actividad")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Actividad guardada correctamente"),
-            @ApiResponse(responseCode = "400", description = "La actividad ya existe o la información está incompleta"),
+            @ApiResponse(responseCode = "201", description = "Actividad guardada correctamente"),
+            @ApiResponse(responseCode = "400", description = "La información está incompleta o la actividad ya existe"),
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
     @PostMapping("/crear")
@@ -54,7 +54,7 @@ public class ActividadControlador {
             actividadServicio.crearActividad(actividad);
             return ResponseEntity.status(HttpStatus.CREATED).body("Actividad creada correctamente");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -68,16 +68,19 @@ public class ActividadControlador {
     public ResponseEntity<List<Actividad>> obtenerActividades() {
         try {
             List<Actividad> actividades = actividadServicio.obtenerActividades();
+            if (actividades.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(actividades);
+            }
             return ResponseEntity.ok(actividades);
-        } catch (ActividadNoExistenteExcepcion e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @Operation(summary = "Obtener actividades por aprendiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de actividades del aprendiz obtenida correctamente"),
-            @ApiResponse(responseCode = "404", description = "No se encontró el aprendiz"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron actividades para el aprendiz"),
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
     @GetMapping("/aprendiz/{aprendizId}")
@@ -85,9 +88,14 @@ public class ActividadControlador {
             @Parameter(description = "ID del aprendiz", required = true) @PathVariable Long aprendizId) {
         try {
             List<Actividad> actividades = actividadServicio.obtenerActividadesPorAprendiz(aprendizId);
+            if (actividades.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(actividades);
+            }
             return ResponseEntity.ok(actividades);
         } catch (AprendizNoEncontradoExcepcion e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -95,6 +103,7 @@ public class ActividadControlador {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Actividad actualizada correctamente"),
             @ApiResponse(responseCode = "404", description = "No se encontró la actividad"),
+            @ApiResponse(responseCode = "400", description = "Datos de la actividad incompletos"),
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
     @PutMapping("/{id}/actualizar")
@@ -103,14 +112,14 @@ public class ActividadControlador {
             @Parameter(description = "Datos de la actividad actualizados", required = true) @RequestBody Actividad actividad) {
         try {
             if (actividad.getAprendizId() == null || actividad.getEntrenadorId() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El id del aprendiz y del entrenador son obligatorias.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID del aprendiz y del entrenador son obligatorios.");
             }
             actividadServicio.actualizarActividad(id, actividad);
-            return ResponseEntity.ok("Se actualizó la actividad correctamente.");
+            return ResponseEntity.ok("Actividad actualizada correctamente.");
         } catch (ActividadNoEncontradaExcepcion e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado :(");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
         }
     }
 
@@ -125,20 +134,21 @@ public class ActividadControlador {
             @Parameter(description = "ID de la actividad a eliminar", required = true) @PathVariable String id) {
         try {
             actividadServicio.eliminarActividad(id);
-            return ResponseEntity.ok("Se eliminó la actividad correctamente.");
+            return ResponseEntity.ok("Actividad eliminada correctamente.");
         } catch (ActividadNoEncontradaExcepcion e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
         }
     }
 
-    //http://localhost:8081/api/actividades/reporte?aprendizId=1&mes=4&anio=2024
     @Operation(summary = "Obtener reporte mensual de actividades por aprendiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reporte generado correctamente"),
-            @ApiResponse(responseCode = "404", description = "No se encontró la actividad"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron actividades para el aprendiz en el periodo especificado"),
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
-    @GetMapping("/reporte")
+    @GetMapping("/reportes")
     public ResponseEntity<String> obtenerReporteMensual(
             @Parameter(description = "ID del aprendiz", required = true) @RequestParam Long aprendizId,
             @Parameter(description = "Mes del reporte (1-12)", required = true) @RequestParam int mes,
@@ -148,6 +158,8 @@ public class ActividadControlador {
             return ResponseEntity.ok(reporte);
         } catch (ActividadNoEncontradaExcepcion e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error inesperado.");
         }
     }
 }
