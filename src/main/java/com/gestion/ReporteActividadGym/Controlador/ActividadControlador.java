@@ -49,14 +49,12 @@ public class ActividadControlador {
             actividad.setNombreEntrenamiento(nombreEntrenamiento);
             actividad.setFechaEntrenamiento(fechaEntrenamiento);
             actividad.setTipoEntrenamiento(tipoEntrenamiento);
-            actividad.setDuracionEntrenamiento(String.valueOf(duracionEntrenamiento));
+            actividad.setDuracionEntrenamiento(duracionEntrenamiento);
 
             actividadServicio.crearActividad(actividad);
             return ResponseEntity.status(HttpStatus.CREATED).body("Actividad creada correctamente");
-        } catch (ActividadExistenteExcepcion e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La actividad ya existe: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la actividad: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

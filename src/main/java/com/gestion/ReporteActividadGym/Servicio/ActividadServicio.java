@@ -75,7 +75,7 @@ public class ActividadServicio {
         List<Actividad> actividades = obtenerActividadesPorAprendiz(aprendizId);
 
         if (actividades.isEmpty()) {
-            return "El aprendiz " + aprendizId + " no tiene actividades registradas.";
+            return "El aprendiz " + aprendizId + " no tiene actividades registradas para el mes " + mes + " del año " + anio + ".";
         }
         LocalDate inicioMes = LocalDate.of(anio, mes, 1);
         LocalDate finMes = inicioMes.withDayOfMonth(inicioMes.lengthOfMonth());

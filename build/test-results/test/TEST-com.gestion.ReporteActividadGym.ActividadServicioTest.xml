@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.gestion.ReporteActividadGym.ActividadServicioTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-07-27T16:17:18" hostname="DESKTOP-B1CH9TQ" time="0.642">
+<testsuite name="com.gestion.ReporteActividadGym.ActividadServicioTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-07-28T21:47:28" hostname="DESKTOP-B1CH9TQ" time="3.206">
   <properties/>
-  <testcase name="generarReporteMensualTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.554"/>
+  <testcase name="generarReporteMensualTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="3.002"/>
   <testcase name="obtenerActividadesNoExistentesTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.005"/>
-  <testcase name="obtenerActividadesPorAprendiz_ActividadNoExistente()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.008"/>
-  <testcase name="eliminarActividadNoEncontrada()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.011"/>
-  <testcase name="crearActividadNuevaTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.022"/>
-  <testcase name="actualizarActividadTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.007"/>
-  <testcase name="crearActividadExistenteTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.006"/>
+  <testcase name="obtenerActividadesPorAprendiz_ActividadNoExistente()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.029"/>
+  <testcase name="eliminarActividadNoEncontrada()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.009"/>
+  <testcase name="crearActividadNuevaTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.061"/>
+  <testcase name="actualizarActividadTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.035"/>
+  <testcase name="crearActividadExistenteTest()" classname="com.gestion.ReporteActividadGym.ActividadServicioTest" time="0.009"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
