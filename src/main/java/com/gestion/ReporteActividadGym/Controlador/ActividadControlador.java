@@ -12,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/actividades")
@@ -34,27 +32,14 @@ public class ActividadControlador {
             @ApiResponse(responseCode = "500", description = "Ocurrió un error inesperado")
     })
     @PostMapping("/crear")
-    public ResponseEntity<String> crearActividad(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<String> crearActividad(@RequestBody Actividad actividad) {
         try {
-            Long aprendizId = Long.parseLong(requestBody.get("aprendizId").toString());
-            Long entrenadorId = Long.parseLong(requestBody.get("entrenadorId").toString());
-            String nombreEntrenamiento = requestBody.get("nombreEntrenamiento").toString();
-            LocalDate fechaEntrenamiento = LocalDate.parse(requestBody.get("fechaEntrenamiento").toString());
-            String tipoEntrenamiento = requestBody.get("tipoEntrenamiento").toString();
-            String duracionEntrenamiento = requestBody.get("duracionEntrenamiento").toString();
-
-            Actividad actividad = new Actividad();
-            actividad.setAprendizId(aprendizId);
-            actividad.setEntrenadorId(entrenadorId);
-            actividad.setNombreEntrenamiento(nombreEntrenamiento);
-            actividad.setFechaEntrenamiento(fechaEntrenamiento);
-            actividad.setTipoEntrenamiento(tipoEntrenamiento);
-            actividad.setDuracionEntrenamiento(duracionEntrenamiento);
-
             actividadServicio.crearActividad(actividad);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Actividad creada correctamente");
-        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Actividad creada con éxito");
+        } catch (ActividadExistenteExcepcion e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
